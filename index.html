@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AntiGravity — Web3 Payment Infrastructure</title>
+  <meta name="description" content="The next-generation antigravity Web3 payment system. Cross-chain routing, floating blockchain nodes, and holographic payment panels for the decentralized future." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Particle canvas background -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">AntiGravity</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="#features">Protocol</a></li>
+        <li><a href="#stats">Network</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#chains">Chains</a></li>
+      </ul>
+      <div class="nav__cta">
+        <a href="#" class="btn btn--ghost" id="navLaunchBtn">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img src="hero_bg.png" alt="Web3 Antigravity Hero" class="hero__bg-img" />
+      <div class="hero__overlay"></div>
+    </div>
+
+    <!-- Floating orbs -->
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+    <div class="orb orb--3"></div>
+
+    <!-- Levitating rings -->
+    <div class="ring ring--1"></div>
+    <div class="ring ring--2"></div>
+    <div class="ring ring--3"></div>
+
+    <div class="hero__content">
+      <div class="hero__badge" id="heroBadge">
+        <span class="badge-dot"></span>
+        Live on 14 Chains · $4.2B Processed
+      </div>
+      <h1 class="hero__title">
+        <span class="title-line">Payments That</span>
+        <span class="title-line gradient-text">Defy Gravity</span>
+      </h1>
+      <p class="hero__subtitle">
+        Cross-chain routing at the speed of light. AntiGravity dissolves blockchain barriers — 
+        route value frictionlessly across every major network with zero bridge risk.
+      </p>
+      <div class="hero__actions">
+        <a href="#" class="btn btn--primary" id="heroGetStarted">
+          <span>Get Started</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how" class="btn btn--ghost" id="heroLearnMore">View Demo</a>
+      </div>
+
+      <!-- Holographic HUD card -->
+      <div class="hud-card" id="hudCard">
+        <div class="hud-card__header">
+          <span class="hud-label">LIVE TRANSACTION</span>
+          <span class="hud-status">● CONFIRMED</span>
+        </div>
+        <div class="hud-card__body">
+          <div class="hud-row">
+            <span class="hud-key">Route</span>
+            <span class="hud-val">ETH → SOL → AVAX</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-key">Amount</span>
+            <span class="hud-val emerald">$128,400.00</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-key">Latency</span>
+            <span class="hud-val">0.38s ⚡</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-key">Fee</span>
+            <span class="hud-val">$0.004</span>
+          </div>
+        </div>
+        <div class="hud-progress">
+          <div class="hud-progress__bar"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats" id="stats">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat-card" id="stat0">
+          <div class="stat-card__icon">⬡</div>
+          <div class="stat-card__value" data-target="14">0</div>
+          <div class="stat-card__label">Supported Chains</div>
+        </div>
+        <div class="stat-card" id="stat1">
+          <div class="stat-card__icon">⚡</div>
+          <div class="stat-card__value" data-target="380" data-suffix="ms">0ms</div>
+          <div class="stat-card__label">Avg. Settlement</div>
+        </div>
+        <div class="stat-card" id="stat2">
+          <div class="stat-card__icon">◎</div>
+          <div class="stat-card__value" data-target="4.2" data-prefix="$" data-suffix="B">$0B</div>
+          <div class="stat-card__label">Total Volume</div>
+        </div>
+        <div class="stat-card" id="stat3">
+          <div class="stat-card__icon">✦</div>
+          <div class="stat-card__value" data-target="99.98" data-suffix="%">0%</div>
+          <div class="stat-card__label">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Protocol Architecture</p>
+        <h2 class="section-title">Built for the <span class="gradient-text">Gravity-Free</span> Economy</h2>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card" id="feat0">
+          <div class="feature-card__glow"></div>
+          <div class="feature-card__icon blue-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="10" stroke="#3b9eff" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="5" fill="#3b9eff" opacity="0.3"/>
+              <circle cx="14" cy="14" r="2" fill="#3b9eff"/>
+            </svg>
+          </div>
+          <h3>Floating Nodes</h3>
+          <p>Self-organizing blockchain node mesh. Redundant by design — nodes levitate across availability zones, eliminating single points of failure.</p>
+        </div>
+        <div class="feature-card" id="feat1">
+          <div class="feature-card__glow glow-emerald"></div>
+          <div class="feature-card__icon emerald-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <ellipse cx="14" cy="14" rx="12" ry="5" stroke="#22d3a5" stroke-width="1.5"/>
+              <ellipse cx="14" cy="14" rx="12" ry="5" stroke="#22d3a5" stroke-width="1.5" transform="rotate(60 14 14)"/>
+              <ellipse cx="14" cy="14" rx="12" ry="5" stroke="#22d3a5" stroke-width="1.5" transform="rotate(120 14 14)"/>
+            </svg>
+          </div>
+          <h3>Cross-Chain Routing</h3>
+          <p>Translucent ring architecture maps optimal paths between chains in real time. Zero bridge risk, maximum throughput, sub-second finality.</p>
+        </div>
+        <div class="feature-card" id="feat2">
+          <div class="feature-card__glow glow-purple"></div>
+          <div class="feature-card__icon purple-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="4" y="8" width="20" height="13" rx="2" stroke="#a78bfa" stroke-width="1.5"/>
+              <path d="M4 12h20" stroke="#a78bfa" stroke-width="1.5"/>
+              <rect x="8" y="15" width="4" height="2" rx="1" fill="#a78bfa" opacity="0.7"/>
+            </svg>
+          </div>
+          <h3>Holographic Payments</h3>
+          <p>Real-time holographic UI panels provide live transaction visualization. Watch value move across chains in cinematic slow-motion.</p>
+        </div>
+        <div class="feature-card" id="feat3">
+          <div class="feature-card__glow glow-cyan"></div>
+          <div class="feature-card__icon cyan-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4l2.5 7h7.5l-6 4.5 2.5 7L14 18.5 7.5 22.5l2.5-7L4 11h7.5z" stroke="#06b6d4" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>ZK-Proof Settlement</h3>
+          <p>Every transaction settled with zero-knowledge proofs. Privacy-preserving by default, cryptographic guarantees on every hop.</p>
+        </div>
+        <div class="feature-card" id="feat4">
+          <div class="feature-card__glow glow-emerald"></div>
+          <div class="feature-card__icon emerald-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4v20M4 14h20" stroke="#22d3a5" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="14" cy="14" r="4" stroke="#22d3a5" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h3>Unified Liquidity</h3>
+          <p>Single liquidity layer spanning all supported chains. Deep pools, tight spreads, and institutional-grade execution on every trade.</p>
+        </div>
+        <div class="feature-card" id="feat5">
+          <div class="feature-card__glow glow-blue"></div>
+          <div class="feature-card__icon blue-glow">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M8 20l4-12 4 12M10 16h8" stroke="#3b9eff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Developer API</h3>
+          <p>Three lines of code to integrate cross-chain payments. SDKs for TypeScript, Python, Go, and Rust. Mainnet in minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">How It Works</p>
+        <h2 class="section-title">Three Steps to <span class="gradient-text">Zero Gravity</span></h2>
+      </div>
+      <div class="steps">
+        <div class="step" id="step0">
+          <div class="step__number">01</div>
+          <div class="step__content">
+            <h3>Connect Your Wallet</h3>
+            <p>Link any EVM or non-EVM wallet. AntiGravity detects your chain automatically and prepares optimal routing paths.</p>
+          </div>
+        </div>
+        <div class="step__connector"></div>
+        <div class="step" id="step1">
+          <div class="step__number">02</div>
+          <div class="step__content">
+            <h3>Select Destination Chain</h3>
+            <p>Pick where value lands. Our ring-routing engine calculates the lowest cost, fastest path across all 14 supported networks.</p>
+          </div>
+        </div>
+        <div class="step__connector"></div>
+        <div class="step" id="step2">
+          <div class="step__number">03</div>
+          <div class="step__content">
+            <h3>Confirm & Levitate</h3>
+            <p>Sign once. Watch your payment levitate across chains in real-time on the holographic dashboard. Settled in under a second.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAINS -->
+  <section class="chains" id="chains">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Supported Networks</p>
+        <h2 class="section-title">Every Chain. <span class="gradient-text">One Protocol.</span></h2>
+      </div>
+      <div class="chains__ticker">
+        <div class="chains__track" id="chainsTrack">
+          <div class="chain-pill">⟠ Ethereum</div>
+          <div class="chain-pill">◎ Solana</div>
+          <div class="chain-pill">⬡ Polygon</div>
+          <div class="chain-pill">▲ Avalanche</div>
+          <div class="chain-pill">✦ Arbitrum</div>
+          <div class="chain-pill">⬟ Optimism</div>
+          <div class="chain-pill">◈ BNB Chain</div>
+          <div class="chain-pill">⊛ Base</div>
+          <div class="chain-pill">◉ Cosmos</div>
+          <div class="chain-pill">᎒ Near</div>
+          <div class="chain-pill">⊞ Aptos</div>
+          <div class="chain-pill">⊕ Sui</div>
+          <div class="chain-pill">◎ Fantom</div>
+          <div class="chain-pill">⬡ zkSync</div>
+          <!-- Duplicate for seamless loop -->
+          <div class="chain-pill">⟠ Ethereum</div>
+          <div class="chain-pill">◎ Solana</div>
+          <div class="chain-pill">⬡ Polygon</div>
+          <div class="chain-pill">▲ Avalanche</div>
+          <div class="chain-pill">✦ Arbitrum</div>
+          <div class="chain-pill">⬟ Optimism</div>
+          <div class="chain-pill">◈ BNB Chain</div>
+          <div class="chain-pill">⊛ Base</div>
+          <div class="chain-pill">◉ Cosmos</div>
+          <div class="chain-pill">᎒ Near</div>
+          <div class="chain-pill">⊞ Aptos</div>
+          <div class="chain-pill">⊕ Sui</div>
+          <div class="chain-pill">◎ Fantom</div>
+          <div class="chain-pill">⬡ zkSync</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card" id="ctaCard">
+        <div class="cta-card__orb cta-orb-1"></div>
+        <div class="cta-card__orb cta-orb-2"></div>
+        <p class="section-eyebrow">Early Access</p>
+        <h2 class="cta-title">Ready to <span class="gradient-text">Leave the Ground?</span></h2>
+        <p class="cta-subtitle">Join 3,200+ developers and teams already building on AntiGravity. Mainnet access. Zero fees for 60 days.</p>
+        <div class="cta-form" id="ctaForm">
+          <input type="email" id="emailInput" class="cta-input" placeholder="your@email.com" aria-label="Email address" />
+          <button class="btn btn--primary" id="ctaSubmit" type="button">Request Access</button>
+        </div>
+        <p class="cta-fine">No credit card required. Mainnet access in 24 hours.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#" class="nav__logo">
+            <span class="logo-icon">⬡</span>
+            <span class="logo-text">AntiGravity</span>
+          </a>
+          <p>The gravity-free Web3 payment protocol.</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Protocol</h4>
+            <a href="#">Docs</a>
+            <a href="#">Whitepaper</a>
+            <a href="#">Security</a>
+          </div>
+          <div class="footer__col">
+            <h4>Developers</h4>
+            <a href="#">SDK</a>
+            <a href="#">API Reference</a>
+            <a href="#">GitHub</a>
+          </div>
+          <div class="footer__col">
+            <h4>Community</h4>
+            <a href="#">Discord</a>
+            <a href="#">Twitter / X</a>
+            <a href="#">Blog</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 AntiGravity Labs. All rights reserved.</p>
+        <p>Built on trust, secured by ZK.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
