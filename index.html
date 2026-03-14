@@ -139,6 +139,132 @@
     </div>
   </section>
 
+  <!-- INTERACTIVE WIDGET -->
+  <section class="widget-section" id="tryit">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Live Demo</p>
+        <h2 class="section-title">Try <span class="gradient-text">AstraPay</span> Now</h2>
+      </div>
+      <div class="widget-layout">
+
+        <!-- Left: Tabs widget -->
+        <div class="widget-panel" id="widgetPanel">
+          <!-- Backend status pill -->
+          <div class="backend-status" id="backendStatus">
+            <span class="backend-dot" id="backendDot"></span>
+            <span id="backendLabel">Connecting to backend…</span>
+          </div>
+
+          <!-- Tabs -->
+          <div class="widget-tabs">
+            <button class="widget-tab active" id="tabSwap" data-tab="swap">⇄ Swap Quote</button>
+            <button class="widget-tab" id="tabPay" data-tab="pay">⬡ Send Payment</button>
+          </div>
+
+          <!-- Swap Quote Tab -->
+          <div class="widget-body" id="swapTab">
+            <div class="form-group">
+              <label>From Token</label>
+              <select id="swapFrom" class="form-select">
+                <option value="ETH">ETH — Ethereum</option>
+                <option value="BTC">BTC — Bitcoin</option>
+                <option value="SOL">SOL — Solana</option>
+                <option value="MATIC">MATIC — Polygon</option>
+                <option value="AVAX">AVAX — Avalanche</option>
+                <option value="BNB">BNB — BNB Chain</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>To Token</label>
+              <select id="swapTo" class="form-select">
+                <option value="USDC">USDC</option>
+                <option value="USDT">USDT</option>
+                <option value="DAI">DAI</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" id="swapAmount" class="form-input" placeholder="1.0" value="1" min="0.0001" step="0.01" />
+            </div>
+            <button class="btn btn--primary widget-btn" id="getQuoteBtn">Get Quote →</button>
+
+            <!-- Quote result -->
+            <div class="result-panel" id="quoteResult" style="display:none">
+              <div class="result-row"><span>Rate</span><span id="qRate" class="result-val"></span></div>
+              <div class="result-row"><span>You Receive</span><span id="qReceive" class="result-val emerald"></span></div>
+              <div class="result-row"><span>Price Impact</span><span id="qImpact" class="result-val"></span></div>
+              <div class="result-row"><span>Gas Fee</span><span id="qGas" class="result-val"></span></div>
+              <div class="result-row"><span>Protocol Fee</span><span id="qFee" class="result-val"></span></div>
+              <div class="result-row"><span>DEX</span><span id="qDex" class="result-val" style="font-size:0.72rem"></span></div>
+            </div>
+            <div class="result-error" id="quoteError" style="display:none"></div>
+          </div>
+
+          <!-- Send Payment Tab -->
+          <div class="widget-body" id="payTab" style="display:none">
+            <div class="form-group">
+              <label>Pay With</label>
+              <select id="payToken" class="form-select">
+                <option value="ETH">ETH</option>
+                <option value="BTC">BTC</option>
+                <option value="SOL">SOL</option>
+                <option value="MATIC">MATIC</option>
+                <option value="AVAX">AVAX</option>
+                <option value="BNB">BNB</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount</label>
+              <input type="number" id="payAmount" class="form-input" placeholder="0.5" value="0.5" min="0.0001" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label>Target Chain</label>
+              <select id="payChain" class="form-select">
+                <option value="Polygon">Polygon</option>
+                <option value="Arbitrum">Arbitrum</option>
+                <option value="Optimism">Optimism</option>
+                <option value="Base">Base</option>
+                <option value="zkSync">zkSync</option>
+                <option value="Avalanche">Avalanche</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Merchant Wallet</label>
+              <input type="text" id="payMerchant" class="form-input" placeholder="0xABC123…" value="0xMerchantDemo1234567890abcdef" />
+            </div>
+            <button class="btn btn--primary widget-btn" id="sendPayBtn">
+              <span id="sendBtnText">Send Payment →</span>
+            </button>
+
+            <!-- Payment result -->
+            <div class="result-panel" id="payResult" style="display:none">
+              <div class="result-row"><span>Tx Hash</span><span id="pHash" class="result-val mono-sm"></span></div>
+              <div class="result-row"><span>Route</span><span id="pRoute" class="result-val emerald"></span></div>
+              <div class="result-row"><span>Amount USD</span><span id="pAmountUSD" class="result-val"></span></div>
+              <div class="result-row"><span>Est. Time</span><span id="pTime" class="result-val"></span></div>
+              <div class="result-row"><span>Est. Fee</span><span id="pFee" class="result-val"></span></div>
+              <div class="result-row"><span>Status</span><span id="pStatus" class="result-val status-badge"></span></div>
+            </div>
+            <div class="result-error" id="payError" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- Right: Live Feed -->
+        <div class="feed-panel">
+          <div class="feed-header">
+            <span class="feed-title">⬡ Live Transaction Feed</span>
+            <span class="feed-badge" id="feedCount">0 txs</span>
+          </div>
+          <div class="feed-list" id="feedList">
+            <div class="feed-empty">Waiting for transactions…</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- FEATURES -->
   <section class="features" id="features">
     <div class="container">
