@@ -1,7 +1,11 @@
 /* ============================================================
-   AntiGravity — script.js
-   Particles · Scroll FX · Counter Animation · Nav scroll
+   AstraPay — script.js
+   Frontend ↔ Backend integration via Socket.io + REST API
    ============================================================ */
+
+// ── Backend config ─────────────────────────────────────────
+const API_BASE = 'http://localhost:5000/api';
+const WS_URL   = 'http://localhost:5000';
 
 // ── NAV scroll effect ──────────────────────────────────────
 const mainNav = document.getElementById('mainNav');
@@ -13,7 +17,7 @@ window.addEventListener('scroll', () => {
 const canvas  = document.getElementById('particleCanvas');
 const ctx     = canvas.getContext('2d');
 let particles = [];
-let connectionThreshold = 140;
+const connectionThreshold = 140;
 
 function resizeCanvas() {
   canvas.width  = window.innerWidth;
@@ -84,15 +88,12 @@ animateParticles();
 const revealEls = document.querySelectorAll(
   '.stat-card, .feature-card, .step, .chain-pill, .cta-card, .hud-card'
 );
-
 revealEls.forEach(el => el.classList.add('reveal'));
 
 const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, (entry.target.dataset.delay || 0));
+      setTimeout(() => entry.target.classList.add('visible'), entry.target.dataset.delay || 0);
       revealObserver.unobserve(entry.target);
     }
   });
@@ -113,8 +114,7 @@ function animateCounter(el) {
   const startTime = performance.now();
 
   function step(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+    const progress = Math.min((now - startTime) / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
     const value = eased * target;
     el.textContent = prefix + (isFloat ? value.toFixed(2) : Math.round(value)) + suffix;
@@ -132,23 +132,17 @@ const statObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('.stat-card__value[data-target]').forEach(el => {
-  statObserver.observe(el);
-});
+document.querySelectorAll('.stat-card__value[data-target]').forEach(el => statObserver.observe(el));
 
 // ── Chains ticker pause on hover ───────────────────────────
 const chainsTrack = document.getElementById('chainsTrack');
 if (chainsTrack) {
-  chainsTrack.addEventListener('mouseenter', () => {
-    chainsTrack.style.animationPlayState = 'paused';
-  });
-  chainsTrack.addEventListener('mouseleave', () => {
-    chainsTrack.style.animationPlayState = 'running';
-  });
+  chainsTrack.addEventListener('mouseenter', () => { chainsTrack.style.animationPlayState = 'paused'; });
+  chainsTrack.addEventListener('mouseleave', () => { chainsTrack.style.animationPlayState = 'running'; });
 }
 
-// ── CTA form ───────────────────────────────────────────────
-const ctaSubmit = document.getElementById('ctaSubmit');
+// ── CTA form submission ────────────────────────────────────
+const ctaSubmit  = document.getElementById('ctaSubmit');
 const emailInput = document.getElementById('emailInput');
 
 if (ctaSubmit) {
@@ -159,34 +153,24 @@ if (ctaSubmit) {
       emailInput.style.borderColor = '#ff4d6d';
       emailInput.style.boxShadow = '0 0 0 3px rgba(255,77,109,0.2)';
       emailInput.focus();
-      setTimeout(() => {
-        emailInput.style.borderColor = '';
-        emailInput.style.boxShadow = '';
-      }, 2000);
+      setTimeout(() => { emailInput.style.borderColor = ''; emailInput.style.boxShadow = ''; }, 2000);
       return;
     }
-    ctaSubmit.textContent = '✓ You\'re on the list!';
+    ctaSubmit.textContent = "✓ You're on the list!";
     ctaSubmit.style.background = 'linear-gradient(135deg, #22d3a5, #3b9eff)';
     ctaSubmit.disabled = true;
     emailInput.value = '';
     emailInput.placeholder = 'Access request sent!';
   });
-
-  emailInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') ctaSubmit.click();
-  });
+  emailInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') ctaSubmit.click(); });
 }
 
-// ── Tilt effect on feature cards ───────────────────────────
+// ── Feature card tilt ──────────────────────────────────────
 document.querySelectorAll('.feature-card').forEach(card => {
   card.addEventListener('mousemove', (e) => {
     const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotateX = ((y - cy) / cy) * -6;
-    const rotateY = ((x - cx) / cx) * 6;
+    const rotateX = (((e.clientY - rect.top) / rect.height) - 0.5) * -10;
+    const rotateY = (((e.clientX - rect.left) / rect.width) - 0.5) * 10;
     card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     card.style.transition = 'transform 0.1s ease';
   });
@@ -196,29 +180,147 @@ document.querySelectorAll('.feature-card').forEach(card => {
   });
 });
 
-// ── HUD card live update ────────────────────────────────────
-const hudRoutes = [
-  'ETH → SOL → AVAX',
-  'BTC → ETH → MATIC',
-  'SOL → ARB → BASE',
-  'AVAX → OP → zkSync',
-  'MATIC → NEAR → SUI',
-];
+// ============================================================
+// BACKEND INTEGRATION — Socket.io + REST API
+// ============================================================
 
-const hudAmounts = [128400, 54200, 312900, 78100, 209500];
+// HUD card DOM references
 const hudRows = document.querySelectorAll('.hud-val');
 
-let hudIdx = 0;
-setInterval(() => {
-  hudIdx = (hudIdx + 1) % hudRoutes.length;
-  if (hudRows[0]) hudRows[0].textContent = hudRoutes[hudIdx];
-  if (hudRows[1]) hudRows[1].textContent = `$${hudAmounts[hudIdx].toLocaleString()}.00`;
-  if (hudRows[2]) {
-    const ms = (Math.random() * 0.4 + 0.2).toFixed(2);
-    hudRows[2].textContent = `${ms}s ⚡`;
+function updateHUD(tx) {
+  if (hudRows[0]) hudRows[0].textContent = tx.route || 'ETH → USDC → Polygon';
+  if (hudRows[1]) hudRows[1].textContent = tx.amountUSD
+    ? `$${Number(tx.amountUSD).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : '$0.00';
+  if (hudRows[2]) hudRows[2].textContent = `${tx.latency || '0.38s'} ⚡`;
+  if (hudRows[3]) hudRows[3].textContent = tx.estimatedFee || '$0.004';
+
+  // Update status indicator
+  const statusEl = document.querySelector('.hud-status');
+  if (statusEl) {
+    const statusMap = { confirmed: '● CONFIRMED', pending: '◌ PENDING…', failed: '✕ FAILED' };
+    statusEl.textContent = statusMap[tx.status] || '● CONFIRMED';
+    statusEl.style.color = tx.status === 'confirmed' ? 'var(--emerald)'
+      : tx.status === 'failed' ? '#ff4d6d' : '#f59e0b';
   }
-  if (hudRows[3]) {
-    const fee = (Math.random() * 0.008 + 0.001).toFixed(3);
-    hudRows[3].textContent = `$${fee}`;
+}
+
+/**
+ * Fetch protocol stats from the backend and update the stat cards.
+ */
+async function fetchAndUpdateStats() {
+  try {
+    const res  = await fetch(`${API_BASE}/protocol-stats`);
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    // Update stat counters live from backend
+    const cards = document.querySelectorAll('.stat-card__value');
+    const values = [
+      data.supportedChains,
+      parseInt(data.avgSettlement),
+      parseFloat(data.totalVolume.replace(/[$B]/g, '')),
+      parseFloat(data.uptime),
+    ];
+    const targets = [null, 'ms', 'B', '%'];
+    const prefixes = [null, null, '$', null];
+
+    cards.forEach((card, i) => {
+      if (values[i] !== undefined) {
+        card.dataset.target = String(values[i]);
+        if (targets[i]) card.dataset.suffix = targets[i];
+        if (prefixes[i]) card.dataset.prefix = prefixes[i];
+      }
+    });
+  } catch {
+    // Backend offline — silently fall back to static values
   }
-}, 3500);
+}
+
+/**
+ * Initialize Socket.io connection to the AstraPay backend.
+ * Falls back to local simulation if the backend is not running.
+ */
+function initBackendConnection() {
+  // Check if socket.io client library is available
+  if (typeof io === 'undefined') {
+    console.warn('[AstraPay] Socket.io client not loaded — falling back to local simulation');
+    startLocalSimulation();
+    return;
+  }
+
+  const socket = io(WS_URL, {
+    transports: ['websocket', 'polling'],
+    reconnectionAttempts: 3,
+    timeout: 5000,
+  });
+
+  socket.on('connect', () => {
+    console.log('🔌 [AstraPay] Connected to backend WebSocket');
+    fetchAndUpdateStats();
+  });
+
+  // Live transaction feed — updates HUD card
+  socket.on('transaction:feed', (tx) => {
+    console.log('📡 [AstraPay] Live TX:', tx.route, tx.status);
+    updateHUD(tx);
+  });
+
+  // New payment created
+  socket.on('transaction:new', (tx) => {
+    console.log('🔄 [AstraPay] New payment:', tx.txHash?.slice(0, 12) + '…');
+  });
+
+  // Confirmed / failed update
+  socket.on('transaction:update', (tx) => {
+    console.log(`✅ [AstraPay] TX ${tx.txHash?.slice(0, 12)}… → ${tx.status}`);
+    updateHUD(tx);
+  });
+
+  // Stats refresh from backend
+  socket.on('stats:update', (stats) => {
+    console.log('📊 [AstraPay] Stats update received');
+  });
+
+  socket.on('connect_error', () => {
+    console.warn('[AstraPay] Backend not reachable — using local simulation');
+    startLocalSimulation();
+  });
+
+  socket.on('disconnect', () => {
+    console.log('[AstraPay] Disconnected from backend');
+  });
+}
+
+/**
+ * Local simulation fallback — rotates HUD data without the backend.
+ */
+function startLocalSimulation() {
+  const demoRoutes = [
+    { route: 'ETH → USDC → Polygon',    amountUSD: 128400, latency: '0.38s', estimatedFee: '$0.004', status: 'confirmed' },
+    { route: 'BTC → USDC → Arbitrum',   amountUSD: 54200,  latency: '0.29s', estimatedFee: '$0.003', status: 'confirmed' },
+    { route: 'SOL → USDC → Base',       amountUSD: 312900, latency: '0.21s', estimatedFee: '$0.001', status: 'confirmed' },
+    { route: 'AVAX → USDC → zkSync',    amountUSD: 78100,  latency: '0.45s', estimatedFee: '$0.002', status: 'pending'   },
+    { route: 'MATIC → USDC → Optimism', amountUSD: 209500, latency: '0.31s', estimatedFee: '$0.002', status: 'confirmed' },
+  ];
+  let idx = 0;
+
+  setInterval(() => {
+    idx = (idx + 1) % demoRoutes.length;
+    updateHUD(demoRoutes[idx]);
+  }, 3500);
+}
+
+// ── Boot ───────────────────────────────────────────────────
+// Load socket.io client from backend, then connect
+(function boot() {
+  const script = document.createElement('script');
+  script.src = `${WS_URL}/socket.io/socket.io.js`;
+  script.onload  = () => initBackendConnection();
+  script.onerror = () => startLocalSimulation();
+  document.head.appendChild(script);
+
+  // Also fetch stats via REST on load
+  fetchAndUpdateStats();
+})();
