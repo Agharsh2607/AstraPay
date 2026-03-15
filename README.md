@@ -282,16 +282,8 @@ Future development plans:
 GitHub:
 
 ```
-https://github.com/yourusername
+https://github.com/Agharsh2607
 ```
-
----
-
-# 📜 License
-
-This project is licensed under the **MIT License**.
-
----
 
 # ⭐ Support
 
