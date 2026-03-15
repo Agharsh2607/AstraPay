@@ -36,7 +36,7 @@ Built during a **hackathon**, AstraPay explores how decentralized finance princi
 
 
 Example:
-![image](https://image2url.com/r2/default/images/1773558802295-d22d540e-a8ea-4e77-8a1a-da12aac82ac4.png)
+![image](https://pub-1407f82391df4ab1951418d04be76914.r2.dev/uploads/7203a686-c908-49fc-ae8c-ba376f6cd930.png)
 
 # 🎯 Problem Statement
 
